@@ -21,8 +21,8 @@
 title: Nitesh Shetty's Blog
 email: nitheshshetty@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  My plan is to document the things I learn mainly on Linux kernel eco-system.  
-  In the process hope to improve my writing skills.  
+  My plan is to document the things I learn mainly on Linux eco-system.  
+  In the process hope to improve my writing skills and your knowledge.  
 baseurl: "/blogs" # the subpath of your site, e.g. /blog
 url: "http://nitesh-shetty.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  nitesh-shetty
