@@ -1,8 +1,8 @@
 ---
 layout: post
-title:  "Neovim, tmux and plugins"
-date:   202 5-09-14 20:38:24 +0530
-categories: Linux, neovim, tmux, plugins, workflow 
+title:  "Workflow, Neovim, tmux and plugins"
+date:   2025-09-14 20:00:00 +0530
+categories: linux workflow neovim tmux plugins
 ---
 
 My typical workflow in Ubuntu/Debian involves,  
@@ -14,7 +14,8 @@ If you are familiar with vi/vim, neovim has similar navigation keymap.
 I would suggest to go through vimtutor, after installation.  
 Most of my plugin management comes from [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim).  
 For kernel development, there is extra plugin for vim options.  
-Since I use tmux along with neovim, tmux_navigator.lua helps to navigate across multiple tmux panes and vim windows.  
+Since I use tmux along with neovim, tmux_navigator.lua helps to
+navigate across multiple tmux panes and vim windows.  
 
 # Tmux:  
 Ubuntu/Debian tmux installation:  
@@ -28,11 +29,13 @@ I also used tmux resurrect plugin, which restores tmux session.
 > prefix  
 
 To trigger any command related to tmux you need to press a combination of keys,  
-called as prefix. This is usally stored in tmux config file, which can be found in  
+called as prefix.
+This is usually stored in tmux config file, which can be found in  
 ~/.tmux.conf. My tmux.conf can be found [here](https://github.com/nitesh-shetty/dotfiles/blob/main/tmux.conf)  
 ```wget https://github.com/nitesh-shetty/dotfiles/blob/main/tmux.conf ~/.tmux.conf```  
 Default key mapping for tmux is ctrl+b (press 'control' and 'b' key simultaneously),  
-but I changed it to ctrl+a, for convinience. You can change it by editing 'prefix' in  
+but I changed it to ctrl+a, for convenience.
+You can change it by editing 'prefix' in  
 ~/tmux.conf  
 
 # Keymaps:  
@@ -48,13 +51,12 @@ here you need to press ctrl and a together, followed by pressing d.
 ### tmux panes, windows, sessions:
 By default when you open a new session, you get a single pane and single window.  
 Then you can create multiple panes inside a single window.  
-Mulitple windows create a session.  
+Multiple windows create a session.  
 
 A typical scenario where this might happen is.  
 Lets say you are working with multiple virtual machines.  
-I usually prefet to keep a single window for each VM along with renaming each window.  
+I usually prefer to keep a single window for each VM along with renaming each window.  
 In one terminal usually mail is opened. So no need to open multiple session.  
-After some time the keymaps will be automatic.  
 
 #### Creating multiple panes:  
 Splitting the window and creating panes,  

@@ -1,4 +1,83 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="http://nitesh-shetty.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="http://nitesh-shetty.github.io/" rel="alternate" type="text/html" /><updated>2025-09-15T00:03:39+05:30</updated><id>http://nitesh-shetty.github.io/feed.xml</id><title type="html">Nitesh Shetty’s Blog</title><subtitle>My plan is to document the things I learn mainly on Linux eco-system.   In the process hope to improve my writing skills and your knowledge.  </subtitle><entry><title type="html">Neovim, tmux and plugins</title><link href="http://nitesh-shetty.github.io/linux,/neovim,/tmux,/plugins,/workflow/2005/09/14/neovim-tmux-setup.html" rel="alternate" type="text/html" title="Neovim, tmux and plugins" /><published>2005-09-14T20:38:24+05:30</published><updated>2005-09-14T20:38:24+05:30</updated><id>http://nitesh-shetty.github.io/linux,/neovim,/tmux,/plugins,/workflow/2005/09/14/neovim-tmux-setup</id><content type="html" xml:base="http://nitesh-shetty.github.io/linux,/neovim,/tmux,/plugins,/workflow/2005/09/14/neovim-tmux-setup.html"><![CDATA[<p>My typical workflow in Ubuntu/Debian involves,</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2025-09-22T00:05:21+05:30</updated><id>http://localhost:4000/feed.xml</id><title type="html">Nitesh Shetty’s Blog</title><subtitle>My plan is to document the things I learn mainly on Linux eco-system.   In the process hope to improve my writing skills and your knowledge.  </subtitle><entry><title type="html">Workflow, Neomutt, Lei, Notmuch, Getmail, Gmail</title><link href="http://localhost:4000/linux/workflow/neomutt/notmuch/getmail/lei/gmail/2025/09/21/workflow-neomutt.html" rel="alternate" type="text/html" title="Workflow, Neomutt, Lei, Notmuch, Getmail, Gmail" /><published>2025-09-21T20:00:00+05:30</published><updated>2025-09-21T20:00:00+05:30</updated><id>http://localhost:4000/linux/workflow/neomutt/notmuch/getmail/lei/gmail/2025/09/21/workflow-neomutt</id><content type="html" xml:base="http://localhost:4000/linux/workflow/neomutt/notmuch/getmail/lei/gmail/2025/09/21/workflow-neomutt.html"><![CDATA[<p>This is a mail setup for terminal UI users. This uses combination of tools,<br />
+<code class="language-plaintext highlighter-rouge">neomutt</code> for viewing mails,<br />
+<code class="language-plaintext highlighter-rouge">notmuch</code> for filtering mails,<br />
+<code class="language-plaintext highlighter-rouge">getmail</code> for fetching mails from gmail,<br />
+<code class="language-plaintext highlighter-rouge">lei</code> for fetching mails from lore.kernel.org.<br />
+For convinience, lets keep all the config files in ~/.lkml folder<br />
+<code class="language-plaintext highlighter-rouge">mkdir -p ~/.lkml/mail</code></p>
+
+<h1 id="lei">lei:</h1>
+<p>Installation in Debian/Ubuntu:<br />
+<code class="language-plaintext highlighter-rouge">sudo apt install -y lei</code></p>
+
+<p>lei, helps with fetching mail from lore.kernel.org without subscribing to any
+mailing list.<br />
+lei, also has query features which helps in filtering the mails.<br />
+For example to fetch mails from linux-block,linux-fsdevel mailing
+list from last one day,<br />
+below command should be useful.</p>
+
+<p><code class="language-plaintext highlighter-rouge">$ lei q -I https://lore.kernel.org/all -o ~/.lkml/mail --threads 
+    --dedupe=mid 
+    '(tc:linux-block OR tc:linux-fsdevel) AND rt:1.days.ago..'</code></p>
+
+<p>Here t and c indicate to and cc mail recipient respectively.<br />
+Above query also edited later using lei edit-search.</p>
+
+<p>Once the query is finalized, next time to fetch the mails, simply use<br />
+<code class="language-plaintext highlighter-rouge">$ lei up ~/.lkml/mail</code></p>
+
+<h1 id="notmuch">notmuch:</h1>
+<p>Installation in Debian/Ubuntu:<br />
+<code class="language-plaintext highlighter-rouge">sudo apt install -y notmuch</code></p>
+
+<p>Above lei setup usually fetches and notmuch helps in filtering the mails<br />
+Typically a notmuch has a config file in ~/.notmuch-config<br />
+This file contains the path to fetch and store the filtered mails</p>
+
+<p>With notmuch we can filter mails and attach tags to mails.
+And this tag will be used by neomutt to create different virtual mailboxes.</p>
+
+<p>To filter mails to/cc to linux-block and attach tag linux-block, we use
+$ notmuch tag +linux-block – to:linux-block@vger.kernel.org</p>
+
+<p>For more tagging batch queries, an input file can be passed.<br />
+Lets say we create a file by name notmuch-tag-rules,<br />
+<code class="language-plaintext highlighter-rouge">$ cat ~/.lkml/notmuch-tag-rules</code><br />
++linux-block – to:linux-block@vger.kernel.org<br />
++linux-fsdevel – to:linux-fsdevel@vger.kernel.org</p>
+
+<p>This file looks similar to command line query, without ‘notmuch tag’
+To run this batch tagging,<br />
+<code class="language-plaintext highlighter-rouge">$ notmuch tag --batch --input=~/.lkml/notmuch-tag-rules</code></p>
+
+<h1 id="neomutt">neomutt:</h1>
+<p>Installation in Debian/Ubuntu:<br />
+<code class="language-plaintext highlighter-rouge">sudo apt install -y lei</code></p>
+
+<p>neomuttrc is config file, which can be passed to neomutt as argument.</p>
+<h4 id="virtual-mailbox">virtual mailbox:</h4>
+<p>virtual mailboxes help to arrange the mails.
+lets say we want to put mails from linux-block under linux-block mailing list.<br />
+    virtual-mailboxes “linux-block” “notmuch://?query=tag:linux-block”<br />
+    virtual-mailboxes “linux-fsdevel” “notmuch://?query=tag:linux-fsdevel”</p>
+
+<h4 id="syncfetch-mails">sync/fetch mails</h4>
+<p>we make use of bash script to check and sync the mails.<br />
+This script is combination fetching mails from lei and filtering mail
+using notmuch.<br />
+let’s say we name the script fetch.sh<br />
+<code class="language-plaintext highlighter-rouge">$cat ~/.lkml/sync.sh</code><br />
+lei up ~/.lkml/mail<br />
+notmuch new<br />
+notmuch tag –batch –input=~/.lkml/notmuch-tag-rules<br />
+notmuch tag –remove-all +deleted tag:deleted</p>
+
+<p>we assign F to fetch mail using, and save this in neomuttrc <br />
+macro index F “<shell-escape>path_fetchmail_script 2&gt;&amp;1<enter>" "sync email and notmuch"</enter></shell-escape></p>
+
+<p>Next I plan to add information about the neomuttrc and linking all together.<br />
+I plan to update improvements here. Stay tuned !!</p>]]></content><author><name></name></author><category term="linux" /><category term="workflow" /><category term="neomutt" /><category term="notmuch" /><category term="getmail" /><category term="lei" /><category term="gmail" /><summary type="html"><![CDATA[This is a mail setup for terminal UI users. This uses combination of tools, neomutt for viewing mails, notmuch for filtering mails, getmail for fetching mails from gmail, lei for fetching mails from lore.kernel.org. For convinience, lets keep all the config files in ~/.lkml folder mkdir -p ~/.lkml/mail]]></summary></entry><entry><title type="html">Workflow, Neovim, tmux and plugins</title><link href="http://localhost:4000/linux/workflow/neovim/tmux/plugins/2025/09/14/workflow-neovim.html" rel="alternate" type="text/html" title="Workflow, Neovim, tmux and plugins" /><published>2025-09-14T20:00:00+05:30</published><updated>2025-09-14T20:00:00+05:30</updated><id>http://localhost:4000/linux/workflow/neovim/tmux/plugins/2025/09/14/workflow-neovim</id><content type="html" xml:base="http://localhost:4000/linux/workflow/neovim/tmux/plugins/2025/09/14/workflow-neovim.html"><![CDATA[<p>My typical workflow in Ubuntu/Debian involves,</p>
 <h1 id="neovim">Neovim:</h1>
 <p>Ubuntu/Debian neovim installation:<br />
 <code class="language-plaintext highlighter-rouge">sudo apt install -y neovim</code></p>
@@ -7,7 +86,8 @@
 I would suggest to go through vimtutor, after installation.<br />
 Most of my plugin management comes from <a href="https://github.com/nvim-lua/kickstart.nvim">kickstart.nvim</a>.<br />
 For kernel development, there is extra plugin for vim options.<br />
-Since I use tmux along with neovim, tmux_navigator.lua helps to navigate across multiple tmux panes and vim windows.</p>
+Since I use tmux along with neovim, tmux_navigator.lua helps to
+navigate across multiple tmux panes and vim windows.</p>
 
 <h1 id="tmux">Tmux:</h1>
 <p>Ubuntu/Debian tmux installation:<br />
@@ -23,11 +103,13 @@ I also used tmux resurrect plugin, which restores tmux session.</p>
 </blockquote>
 
 <p>To trigger any command related to tmux you need to press a combination of keys,<br />
-called as prefix. This is usally stored in tmux config file, which can be found in<br />
+called as prefix.
+This is usually stored in tmux config file, which can be found in<br />
 ~/.tmux.conf. My tmux.conf can be found <a href="https://github.com/nitesh-shetty/dotfiles/blob/main/tmux.conf">here</a><br />
 <code class="language-plaintext highlighter-rouge">wget https://github.com/nitesh-shetty/dotfiles/blob/main/tmux.conf ~/.tmux.conf</code><br />
 Default key mapping for tmux is ctrl+b (press ‘control’ and ‘b’ key simultaneously),<br />
-but I changed it to ctrl+a, for convinience. You can change it by editing ‘prefix’ in<br />
+but I changed it to ctrl+a, for convenience.
+You can change it by editing ‘prefix’ in<br />
 ~/tmux.conf</p>
 
 <h1 id="keymaps">Keymaps:</h1>
@@ -43,13 +125,12 @@ here you need to press ctrl and a together, followed by pressing d.</p>
 <h3 id="tmux-panes-windows-sessions">tmux panes, windows, sessions:</h3>
 <p>By default when you open a new session, you get a single pane and single window.<br />
 Then you can create multiple panes inside a single window.<br />
-Mulitple windows create a session.</p>
+Multiple windows create a session.</p>
 
 <p>A typical scenario where this might happen is.<br />
 Lets say you are working with multiple virtual machines.<br />
-I usually prefet to keep a single window for each VM along with renaming each window.<br />
-In one terminal usually mail is opened. So no need to open multiple session.<br />
-After some time the keymaps will be automatic.</p>
+I usually prefer to keep a single window for each VM along with renaming each window.<br />
+In one terminal usually mail is opened. So no need to open multiple session.</p>
 
 <h4 id="creating-multiple-panes">Creating multiple panes:</h4>
 <p>Splitting the window and creating panes,<br />
@@ -114,4 +195,4 @@ Similarly you can replace 2 to any nth window.</p>
 <code class="language-plaintext highlighter-rouge">ctrl+a h</code></p>
 
 <p>To expand the current pane right:<br />
-<code class="language-plaintext highlighter-rouge">ctrl+a l</code></p>]]></content><author><name></name></author><category term="Linux," /><category term="neovim," /><category term="tmux," /><category term="plugins," /><category term="workflow" /><summary type="html"><![CDATA[My typical workflow in Ubuntu/Debian involves, Neovim: Ubuntu/Debian neovim installation: sudo apt install -y neovim]]></summary></entry></feed>
+<code class="language-plaintext highlighter-rouge">ctrl+a l</code></p>]]></content><author><name></name></author><category term="linux" /><category term="workflow" /><category term="neovim" /><category term="tmux" /><category term="plugins" /><summary type="html"><![CDATA[My typical workflow in Ubuntu/Debian involves, Neovim: Ubuntu/Debian neovim installation: sudo apt install -y neovim]]></summary></entry></feed>

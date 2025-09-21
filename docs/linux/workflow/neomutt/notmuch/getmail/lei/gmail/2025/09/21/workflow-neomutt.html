@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Workflow, Neomutt, Lei, Notmuch, Getmail, Gmail | Nitesh Shetty’s Blog</title>
+<meta name="generator" content="Jekyll v3.9.5" />
+<meta property="og:title" content="Workflow, Neomutt, Lei, Notmuch, Getmail, Gmail" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This is a mail setup for terminal UI users. This uses combination of tools, neomutt for viewing mails, notmuch for filtering mails, getmail for fetching mails from gmail, lei for fetching mails from lore.kernel.org. For convinience, lets keep all the config files in ~/.lkml folder mkdir -p ~/.lkml/mail" />
+<meta property="og:description" content="This is a mail setup for terminal UI users. This uses combination of tools, neomutt for viewing mails, notmuch for filtering mails, getmail for fetching mails from gmail, lei for fetching mails from lore.kernel.org. For convinience, lets keep all the config files in ~/.lkml folder mkdir -p ~/.lkml/mail" />
+<link rel="canonical" href="http://localhost:4000/linux/workflow/neomutt/notmuch/getmail/lei/gmail/2025/09/21/workflow-neomutt.html" />
+<meta property="og:url" content="http://localhost:4000/linux/workflow/neomutt/notmuch/getmail/lei/gmail/2025/09/21/workflow-neomutt.html" />
+<meta property="og:site_name" content="Nitesh Shetty’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-09-21T20:00:00+05:30" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Workflow, Neomutt, Lei, Notmuch, Getmail, Gmail" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-09-21T20:00:00+05:30","datePublished":"2025-09-21T20:00:00+05:30","description":"This is a mail setup for terminal UI users. This uses combination of tools, neomutt for viewing mails, notmuch for filtering mails, getmail for fetching mails from gmail, lei for fetching mails from lore.kernel.org. For convinience, lets keep all the config files in ~/.lkml folder mkdir -p ~/.lkml/mail","headline":"Workflow, Neomutt, Lei, Notmuch, Getmail, Gmail","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/linux/workflow/neomutt/notmuch/getmail/lei/gmail/2025/09/21/workflow-neomutt.html"},"url":"http://localhost:4000/linux/workflow/neomutt/notmuch/getmail/lei/gmail/2025/09/21/workflow-neomutt.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Nitesh Shetty&apos;s Blog" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Nitesh Shetty&#39;s Blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Workflow, Neomutt, Lei, Notmuch, Getmail, Gmail</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2025-09-21T20:00:00+05:30" itemprop="datePublished">Sep 21, 2025
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>This is a mail setup for terminal UI users. This uses combination of tools,<br />
+<code class="language-plaintext highlighter-rouge">neomutt</code> for viewing mails,<br />
+<code class="language-plaintext highlighter-rouge">notmuch</code> for filtering mails,<br />
+<code class="language-plaintext highlighter-rouge">getmail</code> for fetching mails from gmail,<br />
+<code class="language-plaintext highlighter-rouge">lei</code> for fetching mails from lore.kernel.org.<br />
+For convinience, lets keep all the config files in ~/.lkml folder<br />
+<code class="language-plaintext highlighter-rouge">mkdir -p ~/.lkml/mail</code></p>
+
+<h1 id="lei">lei:</h1>
+<p>Installation in Debian/Ubuntu:<br />
+<code class="language-plaintext highlighter-rouge">sudo apt install -y lei</code></p>
+
+<p>lei, helps with fetching mail from lore.kernel.org without subscribing to any
+mailing list.<br />
+lei, also has query features which helps in filtering the mails.<br />
+For example to fetch mails from linux-block,linux-fsdevel mailing
+list from last one day,<br />
+below command should be useful.</p>
+
+<p><code class="language-plaintext highlighter-rouge">$ lei q -I https://lore.kernel.org/all -o ~/.lkml/mail --threads 
+    --dedupe=mid 
+    '(tc:linux-block OR tc:linux-fsdevel) AND rt:1.days.ago..'</code></p>
+
+<p>Here t and c indicate to and cc mail recipient respectively.<br />
+Above query also edited later using lei edit-search.</p>
+
+<p>Once the query is finalized, next time to fetch the mails, simply use<br />
+<code class="language-plaintext highlighter-rouge">$ lei up ~/.lkml/mail</code></p>
+
+<h1 id="notmuch">notmuch:</h1>
+<p>Installation in Debian/Ubuntu:<br />
+<code class="language-plaintext highlighter-rouge">sudo apt install -y notmuch</code></p>
+
+<p>Above lei setup usually fetches and notmuch helps in filtering the mails<br />
+Typically a notmuch has a config file in ~/.notmuch-config<br />
+This file contains the path to fetch and store the filtered mails</p>
+
+<p>With notmuch we can filter mails and attach tags to mails.
+And this tag will be used by neomutt to create different virtual mailboxes.</p>
+
+<p>To filter mails to/cc to linux-block and attach tag linux-block, we use
+$ notmuch tag +linux-block – to:linux-block@vger.kernel.org</p>
+
+<p>For more tagging batch queries, an input file can be passed.<br />
+Lets say we create a file by name notmuch-tag-rules,<br />
+<code class="language-plaintext highlighter-rouge">$ cat ~/.lkml/notmuch-tag-rules</code><br />
++linux-block – to:linux-block@vger.kernel.org<br />
++linux-fsdevel – to:linux-fsdevel@vger.kernel.org</p>
+
+<p>This file looks similar to command line query, without ‘notmuch tag’
+To run this batch tagging,<br />
+<code class="language-plaintext highlighter-rouge">$ notmuch tag --batch --input=~/.lkml/notmuch-tag-rules</code></p>
+
+<h1 id="neomutt">neomutt:</h1>
+<p>Installation in Debian/Ubuntu:<br />
+<code class="language-plaintext highlighter-rouge">sudo apt install -y lei</code></p>
+
+<p>neomuttrc is config file, which can be passed to neomutt as argument.</p>
+<h4 id="virtual-mailbox">virtual mailbox:</h4>
+<p>virtual mailboxes help to arrange the mails.
+lets say we want to put mails from linux-block under linux-block mailing list.<br />
+    virtual-mailboxes “linux-block” “notmuch://?query=tag:linux-block”<br />
+    virtual-mailboxes “linux-fsdevel” “notmuch://?query=tag:linux-fsdevel”</p>
+
+<h4 id="syncfetch-mails">sync/fetch mails</h4>
+<p>we make use of bash script to check and sync the mails.<br />
+This script is combination fetching mails from lei and filtering mail
+using notmuch.<br />
+let’s say we name the script fetch.sh<br />
+<code class="language-plaintext highlighter-rouge">$cat ~/.lkml/sync.sh</code><br />
+lei up ~/.lkml/mail<br />
+notmuch new<br />
+notmuch tag –batch –input=~/.lkml/notmuch-tag-rules<br />
+notmuch tag –remove-all +deleted tag:deleted</p>
+
+<p>we assign F to fetch mail using, and save this in neomuttrc <br />
+macro index F “<shell-escape>path_fetchmail_script 2&gt;&amp;1<enter>" "sync email and notmuch"</enter></shell-escape></p>
+
+<p>Next I plan to add information about the neomuttrc and linking all together.<br />
+I plan to update improvements here. Stay tuned !!</p>
+
+  </div><a class="u-url" href="/linux/workflow/neomutt/notmuch/getmail/lei/gmail/2025/09/21/workflow-neomutt.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Nitesh Shetty&#39;s Blog</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Nitesh Shetty&#39;s Blog</li><li><a class="u-email" href="mailto:nitheshshetty@gmail.com">nitheshshetty@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/nitesh-shetty"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">nitesh-shetty</span></a></li><li><a href="https://www.linkedin.com/in/nitesh-shetty-16103754"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">nitesh-shetty-16103754</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>My plan is to document the things I learn mainly on Linux eco-system.   In the process hope to improve my writing skills and your knowledge.  </p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
